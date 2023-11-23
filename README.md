@@ -6,12 +6,10 @@ Custom overlay configuration for vcpkg.
 
 ### Get Overlay
 
-Clone `vcpkg-overlay` in the subdirectory `script` of your repository.
+Clone `vcpkg-overlay` in the subdirectory `script/vcpkg` of your repository.
 
 ```sh
-mkdir scripts
-cd scripts
-git clone https://github.com/SineStriker/vcpkg-overlay.git
+git clone https://github.com/SineStriker/vcpkg-overlay.git scripts/vcpkg
 ```
 
 ### Make Manifest File 
@@ -22,14 +20,14 @@ Make configuration file `vcpkg.json` in subdirectory `scripts/vcpkg-manifest`.
 {
     "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
     "dependencies": [
-        ...
+        "some-depencency"
     ],
     "vcpkg-configuration": {
         "overlay-ports": [
-            "../vcpkg-overlay/ports"
+            "../vcpkg/ports"
         ],
         "overlay-triplets": [
-            "../vcpkg-overlay/triplets"
+            "../vcpkg/triplets"
         ]
     }
 }
