@@ -48,10 +48,7 @@ git clone https://github.com/microsoft/vcpkg.git
 cd vcpkg
 bootstrap-vcpkg.bat
 
-vcpkg install ^
-    --x-manifest-root=../scripts/vcpkg-manifest ^
-    --x-install-root=./installed ^
-    --triplet=x64-windows
+vcpkg install --x-manifest-root=../scripts/vcpkg-manifest --x-install-root=./installed --triplet=x64-windows
 ```
 
 #### Unix
