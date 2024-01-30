@@ -1,4 +1,4 @@
-set(LIB_PREFIX "https://github.com/SineStriker/ffmpeg-fake/releases/download")
+set(LIB_PREFIX "https://github.com/diffscope/ffmpeg-fake/releases/download")
 set(LIB_VERSION 0.0.5)
 
 if(WIN32)
