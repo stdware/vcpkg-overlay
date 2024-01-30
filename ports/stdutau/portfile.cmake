@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO VocaValley/stdutau
-    REF 3831faab2966de3042fef10e3570598f4512de89
-    SHA512 820f058cd10d6055711a2ca75abcdfd6a6b78862bcd309d9f14b05b2336b7b39190d5220354050a220446873e5c7a189312affe8512879590902e01deabe5152
+    REPO diffscope/stdutau
+    REF e5f17b6edf1bf932b1da08ed768a0a411318cc58
+    SHA512 02c4f3c8658c8dbe0aa0560ae01b654c2ee7113defd9f8b1790fd6580bbfbcf2d571b04323bc09de9bceacf1a828462c5a34f533cb6830947a87faa73f7c407b
 )
 
 vcpkg_cmake_configure(

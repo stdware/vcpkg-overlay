@@ -3,7 +3,7 @@
   "version": "0.0.1.1",
   "port-version": 1,
   "description": "Standard UTAU library.",
-  "homepage": "https://github.com/VocaValley/stdutau",
+  "homepage": "https://github.com/diffscope/stdutau",
   "license": "Apache-2.0",
   "dependencies": [
     {
