@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/jetbrains-docking-system
-    REF ef52c74f749baad4262c7698fcb191630b9f76a4
-    SHA512 4178dc0486c8085711fcbb93b9e9fe128d3e0222abbdbe5a90b5accc47134741194e25de3428d87334340ca82ea9f32edcb2c38ec36f42c50d541d6ca8223809
+    REF fecb9d9fb7d17e58bc9502324beae8ac0eb8b5d5
+    SHA512 30db0cd6c09a55840314384f3dfcbeea22fe7ee70ec24f2177655cf70d6441c116e841a34c505c6e29ff6f8c0a265950da313a4b977591a9794491e97320cdff
 )
 
 vcpkg_cmake_configure(
