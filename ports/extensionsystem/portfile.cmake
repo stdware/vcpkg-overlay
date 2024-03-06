@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/ExtensionSystem
-    REF 65de3e4690da5577beb1e72c699407634bfe269f
-    SHA512 463a4848e41aa1cae4557cd83b110e9d510dc4f87ae01d59280465bb59cb70ba08168e5aa5ce70840b5887fd4bccd38607a301e5d75e46ae45714f55cc4ba9dc
+    REF 32e24d9a23b1275f8b317825badacd5a869508aa
+    SHA512 a142170ff3f1d18e6a9d4c40f29b4b8c5d2a90b501c3fea1b99fd872543b98245e1c9a6f4fc83edeb299aae0e13d4b10711a2afd1c0fb9bc45f813795209d96c
 )
 
 vcpkg_cmake_configure(
