@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO SineStriker/syscmdline
-    REF 799781f89c99a70ddbdfc02cb48cc92853fba518
-    SHA512 bfdb3fa9422bc6e52aa63dba681e04548fa5909848d0a55a75eaccf13c623b91aaaeb646a8da97d9286eaef4049274569a465c4d448c10302f84c854d6a56cfb
+    REF 70e18ba18056bff1bebab924dde73dbbf04d46f9
+    SHA512 e9ddce733fabe99d2459de9564c27fef578e28072d8d0dd5dce7edee84ecb53e34b597cb5404086201051f8c1fde756c104d890426a12ce8b859e33b14ea60a5
 )
 
 vcpkg_cmake_configure(
