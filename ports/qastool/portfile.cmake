@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO SineStriker/qt-json-autogen
-    REF 9306c9442693ceb395f1b3830d04552ade3dbb06
-    SHA512 0fcd537891627a1b60d69a5d97c1f69297a011dad5014b0f8c2a6a9dfea9347c5a33e68be2caf3187e667d336e1a82896b72d6675b877073014d535f71593136
+    REF c19d7a461c349dc22f8064db6fa9b26af327c4c0
+    SHA512 adf4aa036912f70e82e203c89285e0344d534eea76a649d81e474dd13293a163e1ac796423b6fa56c3c04bfb6134d9e99fc3a7028031a4c2396f6b149d39860f
 )
 
 vcpkg_cmake_configure(
@@ -18,11 +18,6 @@ vcpkg_cmake_install()
 vcpkg_cmake_config_fixup(PACKAGE_NAME ${PORT}
     CONFIG_PATH lib/cmake/${PORT}
 )
-
-if(APPLE)
-    get_filename_component(qt_lib_dir "$ENV{QT_DIR}/../.." REALPATH)
-    execute_process(COMMAND install_name_tool -add_rpath "${qt_lib_dir}" "${CURRENT_PACKAGES_DIR}/tools/qastool/qasc")
-endif()
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/lib")
