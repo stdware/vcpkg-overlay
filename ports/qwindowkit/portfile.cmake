@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/qwindowkit
-    REF 0177eedd03bd9a75dafea296f77b8a6bdad9c3cb
-    SHA512 50656c5068ed7e1f6d6e869612d2c6b467b15023a1bb1217d972a0440c341554c0d184ad03ba6e5cb6d686ae62c8076cc1c87dff8ae98f70535ba06c2e86efb3
+    REF 00b91a374872280a4a5addc22f08c7954a6637aa
+    SHA512 d9fbbe03be7d8b20d09d2ff984330f5c1813827412a17c606eb03203776aaacdd9b4fdb16eade6391a5c6aa5b2bf373ec4a2421774fbb1eb2f3f32f02462f2ab
 )
 
 vcpkg_cmake_configure(
