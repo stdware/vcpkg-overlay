@@ -2,7 +2,7 @@
   "name": "loadso",
   "version": "0.0.1.1",
   "port-version": 1,
-  "description": "Cross-platform class to load a shared library.",
+  "description": "Cross-platform shared library utility and tiny plugin framework.",
   "homepage": "https://github.com/SineStriker/loadso",
   "license": "MIT",
   "dependencies": [
