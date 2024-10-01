@@ -15,8 +15,7 @@
       "host": true
     },
     {
-      "name": "breakpad",
-      "host": true
+      "name": "breakpad"
     }
   ]
 }

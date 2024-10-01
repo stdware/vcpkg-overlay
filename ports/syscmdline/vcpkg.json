@@ -1,7 +1,7 @@
 {
   "name": "syscmdline",
   "version": "0.0.1.4",
-  "port-version": 2,
+  "port-version": 3,
   "description": "C++ Advanced Command Line Parser",
   "homepage": "https://github.com/SineStriker/syscmdline",
   "license": "MIT",
