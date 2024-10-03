@@ -19,7 +19,7 @@ vcpkg_cmake_config_fixup(PACKAGE_NAME ${PORT}
     CONFIG_PATH lib/cmake/${PORT}
 )
 
-if(APPLE)
+if(VCPKG_TARGET_IS_OSX)
     get_filename_component(qt_lib_dir "$ENV{QT_DIR}/../.." REALPATH)
     execute_process(COMMAND install_name_tool -add_rpath "${qt_lib_dir}" "${CURRENT_PACKAGES_DIR}/tools/qastool/qasc")
 endif()
