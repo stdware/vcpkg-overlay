@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/qmsetup
-    REF 257ad66de6c3d2b089fff57ee8308487316bd183
-    SHA512 d43820a43e10e7ba4e94121099c432faae9ce9370eaa933ec3bb890c02f070aec85a2dd0ca84dea546dbf0782a644f87df7f2b5dec9e51e9bcd302f1d64658c1
+    REF 74d2fdb0ad04510ff1dcbd28260e1873dd400d1b
+    SHA512 49da43aecda8651d8562cf5bb1e1a6101e16df2d71f7348e752730f2e6f0bbde8e3ea508c1511aaf4fcd75b50cbb8bcbc86a9aa819d0c9077786e18bced2a36a
 )
 
 vcpkg_cmake_configure(
