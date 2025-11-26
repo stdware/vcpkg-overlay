@@ -1,6 +1,7 @@
 {
   "name": "qwindowkit",
   "version": "1.4.0",
+  "port-version": 1,
   "description": "Cross-platform frameless window framework for Qt. Support Windows, macOS, Linux.",
   "homepage": "https://github.com/stdware/qwindowkit",
   "license": "Apache-2.0",
