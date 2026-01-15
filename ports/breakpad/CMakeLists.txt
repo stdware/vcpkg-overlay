@@ -15,7 +15,12 @@ add_definitions(
 
 set(CMAKE_DEBUG_POSTFIX d)
 
-string(COMPARE EQUAL "${CMAKE_BUILD_TYPE}" "Release" DEFAULT_INSTALL_HEADERS)
+if(CMAKE_BUILD_TYPE MATCHES "Release|RelWithDebInfo|MinSizeRel")
+    set(DEFAULT_INSTALL_HEADERS TRUE)
+else()
+    set(DEFAULT_INSTALL_HEADERS FALSE)
+endif()
+
 option(INSTALL_HEADERS "Install header files" ${DEFAULT_INSTALL_HEADERS})
 option(INSTALL_TOOLS "Install tools" OFF)
 
