@@ -204,7 +204,7 @@ if(INSTALL_HEADERS)
             DIRECTORY src/third_party/lss
             DESTINATION include/third_party
             FILES_MATCHING PATTERN "*.h"
-            REGEX "${HEADER_EXCLUDE_REGEX}" EXCLUDE
+            # REGEX "${HEADER_EXCLUDE_REGEX}" EXCLUDE
         )
     endif()
     install(
@@ -212,7 +212,7 @@ if(INSTALL_HEADERS)
         DESTINATION include/
         FILES_MATCHING
         PATTERN "*.h"
-        REGEX ${HEADER_EXCLUDE_REGEX} EXCLUDE
+        # REGEX ${HEADER_EXCLUDE_REGEX} EXCLUDE
     )
 endif()
 
