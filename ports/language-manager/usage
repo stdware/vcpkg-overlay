@@ -1,4 +1,14 @@
 language-manager provides CMake targets:
 
-find_package(language-manager CONFIG REQUIRED)
-target_link_libraries(main PRIVATE language-manager::language-manager)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        # copy LangMgr plugins
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory
+        "$<TARGET_FILE_DIR:LangPlugins::LangPlugins>/../lib/plugins/LangPlugins"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/LangPlugins"
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory
+        "${LangCore_DIR}/G2pPackages"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/G2pPackages"
+)
