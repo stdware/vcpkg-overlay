@@ -4,6 +4,7 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
         FEATURES
         cuda11 WITH_CUDA11
         cuda12 WITH_CUDA12
+        "install-ort" WITH_INSTALL_ORT
 )
 
 if (${WITH_CUDA11} AND ${WITH_CUDA12})
@@ -53,7 +54,7 @@ vcpkg_cmake_configure(
         SOURCE_PATH "${SOURCE_PATH}"
         OPTIONS
         -DLANGMGR_BUILD_PLUGINS:BOOL=ON
-        -DLANGPLUGINS_INSTALL_ORT:BOOL=OFF
+        -DLANGPLUGINS_INSTALL_ORT:BOOL=${WITH_INSTALL_ORT}
         -DLANGMGR_VCPKG_DIR=${CURRENT_PACKAGES_DIR}/share/LangCore
 )
 

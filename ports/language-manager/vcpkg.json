@@ -22,5 +22,16 @@
     "stduuid",
     "blake3",
     "sparsepp"
-  ]
+  ],
+  "features": {
+    "install-ort": {
+      "description": "Install ONNX Runtime for language-manager plugins"
+    },
+    "cuda11": {
+      "description": "Build language-manager with CUDA 11 support"
+    },
+    "cuda12": {
+      "description": "Build language-manager with CUDA 12 support"
+    }
+  }
 }
