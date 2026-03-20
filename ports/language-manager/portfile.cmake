@@ -14,8 +14,8 @@ endif ()
 vcpkg_from_github(
         OUT_SOURCE_PATH SOURCE_PATH
         REPO wolfgitpr/language-manager
-        REF 57f82d4bb48a56f38758c10f6f72acb75cace590
-        SHA512 fb7c0e4b644316c52293127c49d03db1becae93e15a514f31c84b522aac09adf012e3fb03c597d8c24a5f71174daa86b6b4425d2ece6cd6addfe50f245408d2c
+        REF 8c792ec1b946d0a0f78800209884ef49dae89b51
+        SHA512 f48f5eed466de40f83e10776a93e81a6402acb350d5d1e3ba38e4db8e8ee0c8ba9cae3d818acf6a24092c00226e8edb0b60c5eafb25916fad20af9392d0143e4
         HEAD_REF plugin
 )
 
