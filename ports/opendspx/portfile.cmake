@@ -1,8 +1,8 @@
 vcpkg_from_github(
         OUT_SOURCE_PATH SOURCE_PATH
         REPO diffscope/opendspx
-        REF 575c8e76163723c1163d623248a8c7693ffcd464
-        SHA512 eec1ada3b9481a3054d40425117eb0aae73361d5e9eeefebbc169b261ba185d912df7e1bdd22910c742008c32018ade5be2afa05b576a4ffd9c74ef12d560bbc
+        REF 10bfa730e66c167de88c81f6a7103c9f8f741f39
+        SHA512 6be4feefa36511366ccdd86531f50a20aae145a05457d2b20eba18f619b39d331584aa3e4f558715fc9a72d0ad731d2d4829767725e19fb673aeab425979ad38
         HEAD_REF main
 )
 

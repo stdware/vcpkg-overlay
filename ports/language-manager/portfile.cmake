@@ -14,8 +14,8 @@ endif ()
 vcpkg_from_github(
         OUT_SOURCE_PATH SOURCE_PATH
         REPO wolfgitpr/language-manager
-        REF 121bc84f312d63ca27254efb104dcf44e5728e03
-        SHA512 f31bef238174e4928c5635bb308c4bebddd39cac4669ccd258b1d59b2150825a5911f76c7b12655f41003b5e851db7aac0ca6d7adfd070eae8b31ccfe24762c3
+        REF b19ffd4a44712cd4a75ad42308d35090a438fc67
+        SHA512 9995b1323284ba9d1716b8aa7d4d7fe6d5c004488892609fbd6817371619a4eac433a1df6c842b7b8d8746c1981ec2edf259311fbe9582662ac15c037ebabbc6
         HEAD_REF plugin
 )
 
@@ -68,12 +68,6 @@ vcpkg_cmake_config_fixup(
         # Otherwise dsinfer config will be also deleted,
         # failing the next command (fix up dsinfer config).
         DO_NOT_DELETE_PARENT_CONFIG_PATH
-)
-vcpkg_cmake_config_fixup(
-        PACKAGE_NAME
-        LangPlugins
-        CONFIG_PATH
-        lib/cmake/LangPlugins
 )
 vcpkg_copy_pdbs()
 
