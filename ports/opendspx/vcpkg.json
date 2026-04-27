@@ -1,6 +1,7 @@
 {
   "name": "opendspx",
   "version": "0.0.6",
+  "port-version": 1,
   "homepage": "https://github.com/diffscope/opendspx",
   "description": "DiffScope data exchange format.",
   "license": "Apache-2.0",
@@ -13,8 +14,8 @@
       "name": "vcpkg-cmake-config",
       "host": true
     },
-    "stdutau",
-    "qnrbf",
-    "wolf-midi"
+    "wolf-midi",
+    "nlohmann-json",
+    "zstd"
   ]
 }
