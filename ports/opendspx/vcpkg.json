@@ -1,7 +1,7 @@
 {
   "name": "opendspx",
   "version": "0.0.6",
-  "port-version": 1,
+  "port-version": 2,
   "homepage": "https://github.com/diffscope/opendspx",
   "description": "DiffScope data exchange format.",
   "license": "Apache-2.0",
