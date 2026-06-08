@@ -1,6 +1,7 @@
 {
   "name": "phoneme-converter",
   "version": "0.0.1",
+  "port-version": 1,
   "homepage": "https://github.com/diffscope/phoneme-converter",
   "description": "Phoneme converter",
   "license": "Apache-2.0",
@@ -16,6 +17,7 @@
     "qmsetup",
     "nlohmann-json",
     "stdcorelib",
-    "luajit"
+    "luajit",
+    "pkgconf"
   ]
 }
