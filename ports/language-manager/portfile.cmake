@@ -17,6 +17,7 @@ vcpkg_from_github(
         REF 706bed793288234d7f16548c01e645c4bcee243a
         SHA512 3c60c23c9b8fcf1c9c65901580a2e43aab9f2d7ac2e0f5ca4e42e30eefe1d10fdd9b8c022d4adda64d78a5670930208a92ef2ad2090784d4b0e37a2a8684d521
         HEAD_REF plugin
+        PATCHES fix-load-ort-from-process.patch
 )
 
 # Download ONNX Runtime
