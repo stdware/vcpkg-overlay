@@ -14,10 +14,9 @@ endif ()
 vcpkg_from_github(
         OUT_SOURCE_PATH SOURCE_PATH
         REPO wolfgitpr/language-manager
-        REF 706bed793288234d7f16548c01e645c4bcee243a
-        SHA512 3c60c23c9b8fcf1c9c65901580a2e43aab9f2d7ac2e0f5ca4e42e30eefe1d10fdd9b8c022d4adda64d78a5670930208a92ef2ad2090784d4b0e37a2a8684d521
+        REF e21f686076c50e6491a241db50e5c3f8ec43471f
+        SHA512 6f9ada91312c4e41142556ff5afb9e27ee48874702347bc82c4c1f26d2595800bcfa31835e98740ac8f128cc5bcd41a3471fc0e8a2ad6b091ef31719011ed3d7
         HEAD_REF plugin
-        PATCHES fix-load-ort-from-process.patch
 )
 
 # Download ONNX Runtime
