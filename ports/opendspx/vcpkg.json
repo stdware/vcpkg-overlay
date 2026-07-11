@@ -16,6 +16,7 @@
     },
     "wolf-midi",
     "nlohmann-json",
-    "zstd"
+    "zstd",
+    "stdcorelib"
   ]
 }
