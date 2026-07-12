@@ -1,7 +1,7 @@
 {
   "name": "synthrt",
   "version": "0.0.2.5",
-  "port-version": 2,
+  "port-version": 4,
   "description": "SVS Synthesis Runtime Library",
   "homepage": "https://github.com/diffscope/synthrt",
   "license": "Apache-2.0",
@@ -21,7 +21,18 @@
     "bit7z",
     "blake3",
     "sparsepp",
-    "syscmdline"
+    "syscmdline",
+    "re2",
+    "luajit",
+    {
+      "name": "ffmpeg",
+      "default-features": false,
+      "features": [
+        "avcodec",
+        "avformat",
+        "swresample"
+      ]
+    }
   ],
   "features": {
     "cuda11": {

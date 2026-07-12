@@ -1,4 +1,7 @@
 set(VCPKG_POLICY_ALLOW_DLLS_IN_LIB enabled)
+set(VCPKG_POLICY_SKIP_LIB_CMAKE_MERGE_CHECK enabled)
+set(VCPKG_POLICY_SKIP_MISPLACED_CMAKE_FILES_CHECK enabled)
+set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
@@ -13,9 +16,9 @@ endif()
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF 304b2753947ed2b434eb3603a551ebfcb46eb09d
-    SHA512 052e062b9f733f2b3e7c15098425fcb0294ae8fa1f2cfbbc2587c4667595d87434490644d0266e6b85c185b3353333190ae76b4f8e95883f98c6816134dd3276
-    HEAD_REF main
+    REF 3ef70465aab616485f668d3f847ca5258d7d62a3
+    SHA512 b3d27dc2e73351fcb49c96d53b24d392c05b798c4cb3608ec6e281e4f0adb02c054371f1d99d18aa2b7bb5d465bb75c917c22a7670865fb4fcf81e4690fdf9fa
+    HEAD_REF refactor
 )
 
 # Download ONNX Runtime
@@ -56,29 +59,120 @@ vcpkg_cmake_configure(
 )
 
 vcpkg_cmake_install()
+
+# Fix up all cmake config packages, preserving parent dir
+# so later fixups for sibling packages are not deleted.
 vcpkg_cmake_config_fixup(
-    PACKAGE_NAME
-        synthrt
-    CONFIG_PATH
-        lib/cmake/synthrt
-    # DO NOT omit `DO_NOT_DELETE_PARENT_CONFIG_PATH` option!
-    # Otherwise dsinfer config will be also deleted,
-    # failing the next command (fix up dsinfer config).
+    PACKAGE_NAME synthrt
+    CONFIG_PATH lib/cmake/synthrt
     DO_NOT_DELETE_PARENT_CONFIG_PATH
 )
 vcpkg_cmake_config_fixup(
-    PACKAGE_NAME
-        dsinfer
-    CONFIG_PATH
-        lib/cmake/dsinfer
+    PACKAGE_NAME dsinfer
+    CONFIG_PATH lib/cmake/dsinfer
+    DO_NOT_DELETE_PARENT_CONFIG_PATH
 )
-vcpkg_copy_pdbs()
 
-vcpkg_copy_tools(
-    TOOL_NAMES dsinfer-cli
-    SEARCH_DIR ${CURRENT_PACKAGES_DIR}/bin
-    AUTO_CLEAN
+# Individual srt-* sub-packages referenced by dsinfer/synthrt configs
+foreach(_pkg IN ITEMS srt-core srt-driver srt-s2p srt-svs srt-g2p srt-c srt-audio srt-extract)
+    vcpkg_cmake_config_fixup(
+        PACKAGE_NAME ${_pkg}
+        CONFIG_PATH lib/cmake/${_pkg}
+        DO_NOT_DELETE_PARENT_CONFIG_PATH
+    )
+endforeach()
+
+# dsbank config is installed at lib/cmake/srt-ds-bank/ (DSBANK_INSTALL_NAME = srt-ds-bank)
+vcpkg_cmake_config_fixup(
+    PACKAGE_NAME srt-ds-bank
+    CONFIG_PATH lib/cmake/srt-ds-bank
+    DO_NOT_DELETE_PARENT_CONFIG_PATH
 )
+
+# Add find_dependency() calls to each sub-package Config.cmake so that
+# find_package(srt-driver) transitively finds srt-core, etc.
+# Each entry: "pkg|dep1|dep2|..." (use | as separator since CMake flattens ;)
+set(_fixup_configs
+    "srt-core|stdcorelib|nlohmann_json"
+    "srt-driver|stdcorelib|srt-core"
+    "srt-s2p|stdcorelib|srt-core"
+    "srt-svs|stdcorelib|srt-core"
+    "srt-g2p|stdcorelib|srt-core|srt-ds-bank"
+    "srt-ds-bank|stdcorelib|srt-core"
+    "srt-c|stdcorelib|srt-core|srt-ds-bank|srt-g2p|srt-driver|dsinfer"
+    "dsinfer|srt-core|srt-driver|srt-ds-bank|srt-s2p|srt-svs"
+    "srt-audio|stdcorelib|srt-core"
+    "srt-extract|stdcorelib|srt-core|srt-audio|srt-driver"
+)
+foreach(_entry IN LISTS _fixup_configs)
+    string(REPLACE "|" ";" _entry "${_entry}")
+    list(POP_FRONT _entry _pkg)
+    set(_cf "${CURRENT_PACKAGES_DIR}/share/${_pkg}/${_pkg}Config.cmake")
+    if(EXISTS "${_cf}")
+        file(READ "${_cf}" _cc)
+        set(_dep_block "include(CMakeFindDependencyMacro)")
+        foreach(_dep IN LISTS _entry)
+            set(_dep_block "${_dep_block}\nfind_dependency(${_dep})")
+        endforeach()
+        set(_dep_block "${_dep_block}\n")
+        string(FIND "${_cc}" "include(\"\${CMAKE_CURRENT_LIST_DIR}/${_pkg}Targets.cmake\")" _pos)
+        if(_pos GREATER -1)
+            string(SUBSTRING "${_cc}" 0 ${_pos} _before)
+            string(SUBSTRING "${_cc}" ${_pos} -1 _suffix)
+            set(_cc "${_before}${_dep_block}${_suffix}")
+            file(WRITE "${_cf}" "${_cc}")
+        endif()
+    endif()
+endforeach()
+
+# Remove stale INTERFACE_INCLUDE_DIRECTORIES entries pointing to
+# ${_IMPORT_PREFIX}/../../include (not valid for vcpkg layout)
+foreach(_pkg IN ITEMS srt-core srt-driver srt-s2p srt-svs srt-g2p srt-ds-bank srt-c dsinfer srt-audio srt-extract)
+    set(_tf "${CURRENT_PACKAGES_DIR}/share/${_pkg}/${_pkg}Targets.cmake")
+    if(EXISTS "${_tf}")
+        file(READ "${_tf}" _tc)
+        string(REPLACE ";\${_IMPORT_PREFIX}/../../include" "" _tc "${_tc}")
+        file(WRITE "${_tf}" "${_tc}")
+    endif()
+endforeach()
+
+# Fix dsinfer target include directories:
+# The dsinfer headers are installed under include/diffsinger/Infer/dsinfer/
+# but CommonApiL1.h and other headers use #include <dsinfer/...> (angle-bracket),
+# which requires include/diffsinger/Infer/ to be on the include path.
+set(_dsinfer_tf "${CURRENT_PACKAGES_DIR}/share/dsinfer/dsinferTargets.cmake")
+if(EXISTS "${_dsinfer_tf}")
+    file(READ "${_dsinfer_tf}" _tc)
+    string(REPLACE
+        "INTERFACE_INCLUDE_DIRECTORIES \"\${_IMPORT_PREFIX}/include\""
+        "INTERFACE_INCLUDE_DIRECTORIES \"\${_IMPORT_PREFIX}/include;\${_IMPORT_PREFIX}/include/diffsinger/Infer\""
+        _tc "${_tc}")
+    file(WRITE "${_dsinfer_tf}" "${_tc}")
+endif()
+
+# Create srt-ds-infer package: the target is defined inside dsinfer,
+# so this package just depends on dsinfer.
+file(MAKE_DIRECTORY "${CURRENT_PACKAGES_DIR}/share/srt-ds-infer")
+file(WRITE "${CURRENT_PACKAGES_DIR}/share/srt-ds-infer/srt-ds-inferConfig.cmake" [[
+include(CMakeFindDependencyMacro)
+find_dependency(dsinfer)
+]])
+file(WRITE "${CURRENT_PACKAGES_DIR}/share/srt-ds-infer/srt-ds-inferConfigVersion.cmake" [[
+set(PACKAGE_VERSION 1.0.0)
+if(PACKAGE_FIND_VERSION VERSION_GREATER PACKAGE_VERSION)
+  set(PACKAGE_VERSION_COMPATIBLE FALSE)
+else()
+  set(PACKAGE_VERSION_COMPATIBLE TRUE)
+  if(PACKAGE_FIND_VERSION VERSION_EQUAL PACKAGE_VERSION)
+    set(PACKAGE_VERSION_EXACT TRUE)
+  endif()
+endif()
+]])
+
+# Remove lib/cmake since all packages have been migrated to share/
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/lib/cmake")
+file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/lib/cmake")
+vcpkg_copy_pdbs()
 
 vcpkg_copy_tool_dependencies("${CURRENT_PACKAGES_DIR}/tools/${PORT}")
 
