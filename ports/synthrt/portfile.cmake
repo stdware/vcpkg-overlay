@@ -16,8 +16,8 @@ endif()
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF 3ef70465aab616485f668d3f847ca5258d7d62a3
-    SHA512 b3d27dc2e73351fcb49c96d53b24d392c05b798c4cb3608ec6e281e4f0adb02c054371f1d99d18aa2b7bb5d465bb75c917c22a7670865fb4fcf81e4690fdf9fa
+    REF 0f8456c705efee613427d9ec011f621ae1f00dac
+    SHA512 071f0dff6c1ae35028972d03ae3ba1a64be070227c05c4280d08ce10f5895bdf01b58d6720931b60c9d614d8be6ff4de0b6e5ee0c0b81bbb1eee6185b2a63b55
     HEAD_REF refactor
 )
 
@@ -89,44 +89,16 @@ vcpkg_cmake_config_fixup(
     DO_NOT_DELETE_PARENT_CONFIG_PATH
 )
 
-# Add find_dependency() calls to each sub-package Config.cmake so that
-# find_package(srt-driver) transitively finds srt-core, etc.
-# Each entry: "pkg|dep1|dep2|..." (use | as separator since CMake flattens ;)
-set(_fixup_configs
-    "srt-core|stdcorelib|nlohmann_json"
-    "srt-driver|stdcorelib|srt-core"
-    "srt-s2p|stdcorelib|srt-core"
-    "srt-svs|stdcorelib|srt-core"
-    "srt-g2p|stdcorelib|srt-core|srt-ds-bank"
-    "srt-ds-bank|stdcorelib|srt-core"
-    "srt-c|stdcorelib|srt-core|srt-ds-bank|srt-g2p|srt-driver|dsinfer"
-    "dsinfer|srt-core|srt-driver|srt-ds-bank|srt-s2p|srt-svs"
-    "srt-audio|stdcorelib|srt-core"
-    "srt-extract|stdcorelib|srt-core|srt-audio|srt-driver"
-)
-foreach(_entry IN LISTS _fixup_configs)
-    string(REPLACE "|" ";" _entry "${_entry}")
-    list(POP_FRONT _entry _pkg)
-    set(_cf "${CURRENT_PACKAGES_DIR}/share/${_pkg}/${_pkg}Config.cmake")
-    if(EXISTS "${_cf}")
-        file(READ "${_cf}" _cc)
-        set(_dep_block "include(CMakeFindDependencyMacro)")
-        foreach(_dep IN LISTS _entry)
-            set(_dep_block "${_dep_block}\nfind_dependency(${_dep})")
-        endforeach()
-        set(_dep_block "${_dep_block}\n")
-        string(FIND "${_cc}" "include(\"\${CMAKE_CURRENT_LIST_DIR}/${_pkg}Targets.cmake\")" _pos)
-        if(_pos GREATER -1)
-            string(SUBSTRING "${_cc}" 0 ${_pos} _before)
-            string(SUBSTRING "${_cc}" ${_pos} -1 _suffix)
-            set(_cc "${_before}${_dep_block}${_suffix}")
-            file(WRITE "${_cf}" "${_cc}")
-        endif()
-    endif()
-endforeach()
+# F7 (find_dependency injection) REMOVED:
+# All source Config.cmake.in files now declare find_dependency() correctly,
+# making F7's post-install injection fully redundant (would create duplicates).
+# Verified: srt-core/srt-driver/srt-s2p/srt-svs/srt-g2p/srt-ds-bank/srt-c/
+# dsinfer/srt-audio/srt-extract all have correct find_dependency in source.
+# P1 added missing srt-s2p to srt-g2p and srt-s2p/srt-svs to srt-c.
 
-# Remove stale INTERFACE_INCLUDE_DIRECTORIES entries pointing to
-# ${_IMPORT_PREFIX}/../../include (not valid for vcpkg layout)
+# F8: Remove stale INTERFACE_INCLUDE_DIRECTORIES entries pointing to
+# ${_IMPORT_PREFIX}/../../include (not valid for vcpkg layout).
+# After P0.5 (BuildAPI.cmake fix), this is a no-op but kept as safety net.
 foreach(_pkg IN ITEMS srt-core srt-driver srt-s2p srt-svs srt-g2p srt-ds-bank srt-c dsinfer srt-audio srt-extract)
     set(_tf "${CURRENT_PACKAGES_DIR}/share/${_pkg}/${_pkg}Targets.cmake")
     if(EXISTS "${_tf}")

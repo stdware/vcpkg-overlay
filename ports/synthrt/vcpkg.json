@@ -1,7 +1,7 @@
 {
   "name": "synthrt",
   "version": "0.0.2.5",
-  "port-version": 4,
+  "port-version": 6,
   "description": "SVS Synthesis Runtime Library",
   "homepage": "https://github.com/diffscope/synthrt",
   "license": "Apache-2.0",
@@ -23,6 +23,7 @@
     "sparsepp",
     "syscmdline",
     "re2",
+    "cpp-pinyin",
     "luajit",
     {
       "name": "ffmpeg",
