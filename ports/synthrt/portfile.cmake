@@ -16,8 +16,8 @@ endif()
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF 89b84fff299fcaa6b90bd0dead9c858c6b10049e
-    SHA512 07ea45b8379fee2039f8e2e06eb0449e757e8d07b89b6d7da0100f4effc85019fa7e3885d2cdbf17eba0e0786d06bd41cb0df3859aac82744b34d5a9aeb1792a
+    REF 57728234e47ebc3a8888689cba5cffe444b2ebf9
+    SHA512 785d9ab9fb75f38f2a61ff658af76b508f6b2bf3199eed0adc0c64a3590fa4b53a6d7417a6c138e80ea0c679a925c90f39b1ce321b9c02be6348ba422806648f
     HEAD_REF refactor
 )
 
