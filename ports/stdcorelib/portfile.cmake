@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO SineStriker/stdcorelib
-    REF 1e0090a3752d4cd65b6155d62afdfa493b1cc2c7
-    SHA512 d88a1b104c947f6234e3e07dec90f72b732781f6b5f8bac22f21eb0f0ad51be69a01e3e1b26c1569355d4a3b214b6b1de4e576aa644426e7f563c78fdfc06133
+    REPO stdware/stdcorelib
+    REF 556d4a1014bb5e19568b9ccd19140921c73ad894
+    SHA512 e280c66528281b2a3bed6431d6f3ebe03f5ba5cdd6747ecddc8ec19a1948b4275d68c58cb6108945b7a7d7a846504b31679172aacc9472bb076102d899844a58
 )
 
 vcpkg_cmake_configure(
