@@ -1,6 +1,6 @@
 {
   "name": "synthrt",
-  "version": "0.1.0.1",
+  "version": "0.1.0.2",
   "port-version": 5,
   "description": "SVS Synthesis Runtime Library",
   "homepage": "https://github.com/diffscope/synthrt",
@@ -26,15 +26,7 @@
     "cpp-pinyin",
     "luajit",
     "libsndfile",
-    {
-      "name": "ffmpeg",
-      "default-features": false,
-      "features": [
-        "avcodec",
-        "avformat",
-        "swresample"
-      ]
-    }
+    "ffmpeg-builds"
   ],
   "features": {
     "cuda11": {
