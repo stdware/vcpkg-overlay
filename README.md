@@ -9,7 +9,7 @@ Custom overlay configuration for vcpkg.
 Clone `vcpkg-overlay` in the subdirectory `script/vcpkg` of your repository.
 
 ```sh
-git clone https://github.com/SineStriker/vcpkg-overlay.git scripts/vcpkg
+git clone https://github.com/stdware/vcpkg-overlay.git scripts/vcpkg
 ```
 
 ### Make Manifest File 

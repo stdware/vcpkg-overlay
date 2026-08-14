@@ -15,7 +15,6 @@
       "host": true
     },
     "qmsetup",
-    "nlohmann-json",
     "stduuid",
     "stdcorelib",
     "bit7z",
