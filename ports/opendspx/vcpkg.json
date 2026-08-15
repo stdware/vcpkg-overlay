@@ -15,7 +15,6 @@
       "host": true
     },
     "wolf-midi",
-    "nlohmann-json",
     "zstd",
     "stdcorelib"
   ]

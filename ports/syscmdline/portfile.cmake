@@ -1,14 +1,12 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO stdware/stdcorelib
-    REF 24eba4fc2c30dee594461f9212f18252d43b675b
-    SHA512 4361f3c8fa7679704d2319672c51b66663c23830c92d1a0f2d5a7f04ffe6a6075685aa2d856f29572310c01eef0c40098a136f7d67e725b284b0c9160092565b
+    REPO SineStriker/syscmdline
+    REF 0c9f3de8b11bd2f33b03bea5521bf446af4ead69
+    SHA512 0268dd94bad848e4d05957327d3149c13e2459fb8e82a7e8577ec464108bf69f8d7719df847194c1b6efc8edacd8353c26444e978b40e114b4e4e0ab06b5c0bf
 )
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
-    OPTIONS
-        -DSTDC_BUILD_SHARED=TRUE
 )
 
 vcpkg_cmake_install()

@@ -1,13 +1,13 @@
 vcpkg_from_github(
-        OUT_SOURCE_PATH SOURCE_PATH
-        REPO diffscope/opendspx
-        REF 1ea5b75c6720edc8f9c1b48efd3f60193917bbd5
-        SHA512 d7d1dc11a5c6e19b071853fe30eda79645eeaa49aae3faf93998f1c259bca59e4e6c9663590eaab26f3908ec2fa707fbac15c0bd07416b752de9f55fbc7d627d
-        HEAD_REF main
+    OUT_SOURCE_PATH SOURCE_PATH
+    REPO diffscope/opendspx
+    REF 2caa257523e71b09c19800b4d3a820c9eb1c8ab9
+    SHA512 1dbb73ab7c846f73e3d5993cc386fd4db915602d1f92fcae0b2e4d0f927c5af9a7cd0575e86303a34c874d7fe7ab6f8924ade7f0461ec2c41f303e233eee2a0e
+    HEAD_REF main
 )
 
 vcpkg_cmake_configure(
-        SOURCE_PATH "${SOURCE_PATH}"
+    SOURCE_PATH "${SOURCE_PATH}"
 )
 
 vcpkg_cmake_install()
