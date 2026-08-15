@@ -25,7 +25,8 @@
     "cpp-pinyin",
     "luajit",
     "libsndfile",
-    "ffmpeg-builds"
+    "ffmpeg-builds",
+    "nlohmann-json"
   ],
   "features": {
     "cuda11": {
