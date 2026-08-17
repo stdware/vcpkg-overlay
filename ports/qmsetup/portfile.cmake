@@ -1,6 +1,7 @@
 # qmsetup is a set of CMake modules and one tool, qmcorecmd, that the modules shell out to.
 # There is no library to link, so nothing here needs a debug build.
 set(VCPKG_BUILD_TYPE release)
+set(ENV{VCPKG_CMAKE_RELEASE_BUILD_TYPE} "Release")
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
