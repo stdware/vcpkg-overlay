@@ -16,9 +16,9 @@ endif()
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF 399468589386b993213879527ad6453b581e8e1a
-    SHA512 cea54a49bf222843d04f5b7e55aae21c91196d1ddf216be1ca02c9184f5896a7b6521eee669a301f076fbd5deb94a3a0a6f1ad851d148102c36b461034533227
-    HEAD_REF refactor
+    REF 841b6d0789ff2690fb26df297968133ff6f4013b
+    SHA512 574d205cf6fbe759aa9ef42045e7073975ec0f2f2dd3cef19237d5848c51db54ab18ad2dfd9ee85e8041a78fa50c8a559ca3a682432dc839e79b05b316c1e2f4
+    HEAD_REF localization/passthrough-keys
 )
 
 # Download ONNX Runtime

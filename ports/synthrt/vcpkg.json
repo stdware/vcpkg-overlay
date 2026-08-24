@@ -1,6 +1,6 @@
 {
   "name": "synthrt",
-  "version": "0.1.0.12",
+  "version": "0.1.0.13",
   "port-version": 5,
   "description": "SVS Synthesis Runtime Library",
   "homepage": "https://github.com/diffscope/synthrt",
