@@ -16,46 +16,22 @@ endif()
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF 841b6d0789ff2690fb26df297968133ff6f4013b
-    SHA512 574d205cf6fbe759aa9ef42045e7073975ec0f2f2dd3cef19237d5848c51db54ab18ad2dfd9ee85e8041a78fa50c8a559ca3a682432dc839e79b05b316c1e2f4
-    HEAD_REF localization/passthrough-keys
+    REF f0cdfd3f95331d54549485d113a0ba70df221849
+    SHA512 ea847180772cb1d4d0d798f481f4641a74beedd2720d86dd592ebb367891c12485a31abd81286833e89f4b0ffcbf53864e60575d50262f88b3efc8f44d3478a6
+    HEAD_REF refactor
 )
 
-# Download ONNX Runtime
-include("${CMAKE_CURRENT_LIST_DIR}/setup-onnxruntime/setup.cmake")
-set(_ort_deploy_prefix "${SOURCE_PATH}/third-party/onnxruntime")
-message(STATUS "OS: ${_os_display_name}")
-if(VCPKG_TARGET_IS_WINDOWS)
-    message(STATUS "Downloading DirectML version of ONNX Runtime...")
-    set(_ort_deploy_suffix "default")
-    set(_deploy_dst_dir "${_ort_deploy_prefix}/${_ort_deploy_suffix}")
-    download_onnxruntime_from_nuget("${_deploy_dst_dir}")
-    download_dml_from_nuget("${_deploy_dst_dir}")
-else()
-    message(STATUS "Downloading CPU version of ONNX Runtime...")
-    set(_ort_deploy_suffix "default")
-    set(_deploy_dst_dir "${_ort_deploy_prefix}/${_ort_deploy_suffix}")
-    download_onnxruntime_from_github("cpu" "${_deploy_dst_dir}")
-endif()
-
-# Optional GPU (CUDA) version download
-if(${WITH_CUDA12})
-    message(STATUS "Downloading GPU (CUDA 12.x) version of ONNX Runtime...")
-    set(_ort_deploy_suffix "cuda")
-    set(_deploy_dst_dir "${_ort_deploy_prefix}/${_ort_deploy_suffix}")
-    download_onnxruntime_from_github("cuda12" "${_deploy_dst_dir}")
-elseif(${WITH_CUDA11})
-    message(STATUS "Downloading GPU (CUDA 11.x) version of ONNX Runtime...")
-    set(_ort_deploy_suffix "cuda")
-    set(_deploy_dst_dir "${_ort_deploy_prefix}/${_ort_deploy_suffix}")
-    download_onnxruntime_from_github("cuda11" "${_deploy_dst_dir}")
-endif()
+# ONNX Runtime comes from the onnxruntime-builds port (dependency); synthrt's
+# own CMake does find_package(onnxruntime-builds) and reads
+# ONNXRUNTIME_BUILDS_INCLUDE_DIR / RUNTIME_DIR directly, so no path is passed
+# here. (split: ort download/deploy logic moved to ports/onnxruntime-builds)
 
 # Configure synthrt
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
         -DSYNTHRT_BUILD_TESTS:BOOL=OFF
+        -DSYNTHRT_BUILD_TOOLS:BOOL=OFF
 )
 
 vcpkg_cmake_install()

@@ -1,6 +1,6 @@
 {
   "name": "synthrt",
-  "version": "0.1.0.13",
+  "version": "0.1.0.14",
   "port-version": 5,
   "description": "SVS Synthesis Runtime Library",
   "homepage": "https://github.com/diffscope/synthrt",
@@ -26,15 +26,32 @@
     "luajit",
     "libsndfile",
     "ffmpeg-builds",
-    "nlohmann-json"
+    "nlohmann-json",
+    "onnxruntime-builds"
   ],
   "features": {
     "cuda11": {
       "description": "Enable CUDA 11.x support",
+      "dependencies": [
+        {
+          "name": "onnxruntime-builds",
+          "features": [
+            "cuda11"
+          ]
+        }
+      ],
       "supports": "!osx & !arm & !arm64"
     },
     "cuda12": {
       "description": "Enable CUDA 12.x support",
+      "dependencies": [
+        {
+          "name": "onnxruntime-builds",
+          "features": [
+            "cuda12"
+          ]
+        }
+      ],
       "supports": "!osx & !arm & !arm64"
     }
   }
