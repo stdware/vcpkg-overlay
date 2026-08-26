@@ -1,6 +1,6 @@
 {
   "name": "onnxruntime-builds",
-  "version": "1.26.0",
+  "version": "1.24.4",
   "port-version": 1,
   "description": "ONNX Runtime binary payload port (used by synthrt at build time only)",
   "homepage": "https://github.com/microsoft/onnxruntime",

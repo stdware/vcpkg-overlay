@@ -100,7 +100,7 @@ configure_file(
     @ONLY
 )
 file(WRITE "${CURRENT_PACKAGES_DIR}/share/onnxruntime-builds/onnxruntime-buildsConfigVersion.cmake" [[
-set(PACKAGE_VERSION "1.26.0")
+set(PACKAGE_VERSION "1.24.4")
 if(PACKAGE_FIND_VERSION VERSION_GREATER PACKAGE_VERSION)
   set(PACKAGE_VERSION_COMPATIBLE FALSE)
 else()
