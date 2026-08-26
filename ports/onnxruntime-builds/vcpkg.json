@@ -1,0 +1,18 @@
+{
+  "name": "onnxruntime-builds",
+  "version": "1.26.0",
+  "port-version": 1,
+  "description": "ONNX Runtime binary payload port (used by synthrt at build time only)",
+  "homepage": "https://github.com/microsoft/onnxruntime",
+  "license": "MIT",
+  "features": {
+    "cuda11": {
+      "description": "Deploy CUDA 11.x ONNX Runtime binary",
+      "supports": "!osx & !arm & !arm64"
+    },
+    "cuda12": {
+      "description": "Deploy CUDA 12.x ONNX Runtime binary",
+      "supports": "!osx & !arm & !arm64"
+    }
+  }
+}
