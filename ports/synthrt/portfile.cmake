@@ -3,22 +3,19 @@ set(VCPKG_POLICY_SKIP_LIB_CMAKE_MERGE_CHECK enabled)
 set(VCPKG_POLICY_SKIP_MISPLACED_CMAKE_FILES_CHECK enabled)
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 
-vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-    FEATURES
-        cuda11 WITH_CUDA11
-        cuda12 WITH_CUDA12
-)
+# The cuda12 feature only fans out to the onnxruntime-builds[cuda12]
+# dependency (see vcpkg.json); the ONNX Runtime package itself is located via
+# find_package(onnxruntime-builds) in the synthrt sources, so nothing is
+# forwarded to vcpkg_cmake_configure here.
 
-if(${WITH_CUDA11} AND ${WITH_CUDA12})
-    message(FATAL_ERROR "Cannot enable both cuda11 and cuda12 at the same time")
-endif()
-
+# Pin: "onnxdriver: declare the deployed payload; sync the embedded overlay"
+# (refactor-ort-split, pushed)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF f0cdfd3f95331d54549485d113a0ba70df221849
-    SHA512 ea847180772cb1d4d0d798f481f4641a74beedd2720d86dd592ebb367891c12485a31abd81286833e89f4b0ffcbf53864e60575d50262f88b3efc8f44d3478a6
-    HEAD_REF refactor
+    REF 32e89c70b7c2360a8a218c02ed99ef64d379547d
+    SHA512 2b789ef2b8f8b2f7ff0eb9124077faaffe0c9c5d265c277f868400f69d2e25f6622d6f0915aa031d86233fe7f083f6a32aeb5af7466207aea235215648846895
+    HEAD_REF refactor-ort-split
 )
 
 # ONNX Runtime comes from the onnxruntime-builds port (dependency); synthrt's
@@ -120,7 +117,18 @@ endif()
 # Remove lib/cmake since all packages have been migrated to share/
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/lib/cmake")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/lib/cmake")
-vcpkg_copy_pdbs()
+# Copy PDBs next to every deployed DLL. The default BUILD_PATHS only covers
+# bin/ (and debug/bin), which misses the plugin tree under lib/plugins/ —
+# lite deploys those plugin DLLs verbatim, so their PDBs must sit beside them
+# for Debug/RelWithDebInfo installs (Release-family installs sweep them again;
+# see lite's cmake/LiteBuildApi.cmake).
+vcpkg_copy_pdbs(
+    BUILD_PATHS
+        "${CURRENT_PACKAGES_DIR}/bin/*.dll"
+        "${CURRENT_PACKAGES_DIR}/debug/bin/*.dll"
+        "${CURRENT_PACKAGES_DIR}/lib/plugins/*.dll"
+        "${CURRENT_PACKAGES_DIR}/debug/lib/plugins/*.dll"
+)
 
 vcpkg_copy_tool_dependencies("${CURRENT_PACKAGES_DIR}/tools/${PORT}")
 
