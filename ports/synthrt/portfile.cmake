@@ -8,14 +8,14 @@ set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 # find_package(onnxruntime-builds) in the synthrt sources, so nothing is
 # forwarded to vcpkg_cmake_configure here.
 
-# Pin: "onnxdriver: declare the deployed payload; sync the embedded overlay"
-# (refactor-ort-split, pushed)
+# Pin: "docs(modules): rewrite localization docs to the pass-through model"
+# (localization/passthrough-keys, pushed)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF 32e89c70b7c2360a8a218c02ed99ef64d379547d
-    SHA512 2b789ef2b8f8b2f7ff0eb9124077faaffe0c9c5d265c277f868400f69d2e25f6622d6f0915aa031d86233fe7f083f6a32aeb5af7466207aea235215648846895
-    HEAD_REF refactor-ort-split
+    REF 814bf81e6cd86b6670b2635032d842a997001a55
+    SHA512 7c33737b6913c491fa7dc538ac8639b52efaaf648418b1b16f1745e0b5e518d6484e9eaa9a45040efb753ef3e16f881b09954c29b6f73475e092818dcfa78c33
+    HEAD_REF localization/passthrough-keys
 )
 
 # ONNX Runtime comes from the onnxruntime-builds port (dependency); synthrt's
