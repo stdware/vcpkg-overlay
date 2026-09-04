@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/stdcorelib
-    REF bc80a13524c78d2da3c91c1933e1f94b79a9f4dc
-    SHA512 ebcbe3fc3c4bb111d8b2c5dac5447e396dc27001014ca384eaf2f31c7d9e8ddc87868b95792ee5efeb91e1763550ba8c4b1fb9472cc4c0cd2a91b4ed907dd088
+    REF 4a185d72137988fbf7e3cc91b3ab0f542eb6194b
+    SHA512 c0992c05c7546228fba70b7e430532d407fc277e61daf1ebda6988db9cab4b7de8c7da0414a42ff4392906f20113dfa50d66db52ab8e8d60922eccacdea3d175
 )
 
 vcpkg_cmake_configure(
