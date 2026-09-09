@@ -13,9 +13,9 @@ set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO diffscope/synthrt
-    REF 814bf81e6cd86b6670b2635032d842a997001a55
-    SHA512 7c33737b6913c491fa7dc538ac8639b52efaaf648418b1b16f1745e0b5e518d6484e9eaa9a45040efb753ef3e16f881b09954c29b6f73475e092818dcfa78c33
-    HEAD_REF localization/passthrough-keys
+    REF 0e3940dc79fdf5a943f18f14a5f01776226a93c4
+    SHA512 37b7cc3cacc58573dd5f14d3e97632162e20aa827366d66fe03cb293ae0308fc1a260b97f07eb8e59a22ef36a2a152b7957afe934e50dba9745de1afeba69380
+    HEAD_REF refactor
 )
 
 # ONNX Runtime comes from the onnxruntime-builds port (dependency); synthrt's
