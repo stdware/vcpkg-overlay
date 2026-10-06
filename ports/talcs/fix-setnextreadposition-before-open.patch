@@ -1,0 +1,25 @@
+--- a/src/format/source/AudioFormatInputSource.cpp
++++ b/src/format/source/AudioFormatInputSource.cpp
+@@ -107,9 +107,10 @@
+         if (pos != d->position) {
+             if (d->resampler)
+                 d->resampler->reset();
+-            if (d->io && d->io->openMode())
++            if (isOpen()) {
+                 d->io->seek(outPositionToIn(pos, d->ratio));
+-            d->inPosition = outPositionToIn(pos, d->ratio);
++                d->inPosition = outPositionToIn(pos, d->ratio);
++            }
+         }
+         PositionableAudioSource::setNextReadPosition(pos);
+     }
+@@ -124,7 +125,8 @@
+             d->ratio = sampleRate / d->io->sampleRate();
+             d->resampler.reset(new AudioFormatInputSourcePrivate::AudioFormatInputResampler(d->ratio, bufferSize,
+                                                                                         d->io->channelCount(), d));
+-            d->io->seek(outPositionToIn(d->position, d->ratio));
++            d->inPosition = outPositionToIn(d->position, d->ratio);
++            d->io->seek(d->inPosition);
+             return AudioSource::open(bufferSize, sampleRate);
+         } else
+             return false;
