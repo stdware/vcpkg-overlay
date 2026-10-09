@@ -5,8 +5,8 @@ set(VCPKG_BUILD_TYPE release)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/qmsetup
-    REF 0bd29c49804e450657cb3b5b2a1c1704bca3f5ec
-    SHA512 f58a1757c3ea11177c75443c92972a1e7e6eaddaa2e0e99f773515c60b1329730111948a68629f51aa005dce2c4a26a662a0863f66aace34d1ece667df393988
+    REF a0d54e55bae0773f9f6b8e3af5f2cc1be273a1f7
+    SHA512 24c29598b821aefa9fa35da210eb25019d566870a077dfcf4423538581e458be5780802e1a48efac7d9705f88af6c70d4a31cfd36685d681a8922c17364024d3
 )
 
 # The triplet decides how the runtime is linked, so qmsetup is told what the triplet said rather
