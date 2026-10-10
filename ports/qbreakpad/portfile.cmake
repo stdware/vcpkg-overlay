@@ -1,8 +1,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/qBreakpad
-    REF 22a386292ff6304fef3ed1ef46158e4a37ac7339
-    SHA512 c0fbd0ad62132883592423641900a608ffb0fdb5093e3dfaa91dd56ba33ea6453dcb3f0ca2c4a31c50181630b36afaf7c597c1b8dde04bf67a03aa0bd8d8ac02
+    REF d3c84d46eed2913299ca368d714e2a98e1d6e695
+    SHA512 6bc7dbc3563b006aa815fbcb8984a31040ec0f28b4ca87e15c88a75c71daef4d827fafc257c5a198d3ff25dcce6ec2b35b4d25e070765d2925b9ff4f693285fe
 )
 
 vcpkg_cmake_configure(
