@@ -1,0 +1,30 @@
+{
+  "name": "qactionkit",
+  "version": "1.0.0.0",
+  "description": "Declarative menu and action framework for Qt, with a build time manifest compiler.",
+  "homepage": "https://github.com/stdware/qactionkit",
+  "license": "Apache-2.0",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    {
+      "name": "qmsetup",
+      "host": true
+    }
+  ],
+  "features": {
+    "quick": {
+      "description": "Build QActionKit Quick module."
+    },
+    "widgets": {
+      "description": "Build QActionKit Widgets module."
+    }
+  },
+  "default-features": ["quick", "widgets"]
+}
