@@ -22,17 +22,36 @@ SHA_PATTERN = re.compile(
     r"^(?P<prefix>[ \t]*SHA512[ \t]+)(?P<value>[0-9A-Fa-f]+)(?P<suffix>[ \t]*)(?=\r?$)",
     re.MULTILINE,
 )
+VERSION_PATTERN = re.compile(
+    r"^(?P<prefix>[ \t]*\"version(?:-string|-semver|-date)?\"[ \t]*:[ \t]*)"
+    r"(?P<value>\"[^\"]*\")(?P<suffix>[ \t]*,?[ \t]*)(?=\r?$)",
+    re.MULTILINE,
+)
+PORT_VERSION_PATTERN = re.compile(
+    r"^(?P<prefix>[ \t]*\"port-version\"[ \t]*:[ \t]*)(?P<value>\d+)"
+    r"(?P<suffix>[ \t]*,?[ \t]*)(?=\r?$)",
+    re.MULTILINE,
+)
+
+
+@dataclass(frozen=True)
+class FileUpdate:
+    path: Path
+    original_text: str
+    updated_text: str
 
 
 @dataclass(frozen=True)
 class PortUpdate:
     name: str
-    portfile: Path
     old_ref: str
     new_ref: str
     sha512: str
-    original_text: str
-    updated_text: str
+    files: tuple[FileUpdate, ...]
+
+    @property
+    def portfile(self) -> Path:
+        return self.files[0].path
 
 
 class ArchiveProvider:
@@ -155,8 +174,43 @@ def updated_portfile_text(text: str, portfile: Path, new_ref: str, sha512: str) 
     return text[: sha_match.start("value")] + sha512 + text[sha_match.end("value") :]
 
 
+def updated_manifest_text(text: str, manifest: Path) -> str:
+    """Raise the port-version by one, adding the field when the manifest carries none.
+
+    A port that follows a moving upstream commit keeps the same version string, so this is
+    the only thing that tells vcpkg the port is not the one it already has.
+    """
+    matches = list(PORT_VERSION_PATTERN.finditer(text))
+    if len(matches) > 1:
+        raise ValueError(
+            f"{manifest}: expected at most one port-version field, found {len(matches)}"
+        )
+    if matches:
+        match = matches[0]
+        value = str(int(match.group("value")) + 1)
+        return text[: match.start("value")] + value + text[match.end("value") :]
+
+    # An absent port-version means zero, so the field has to be written in, right after the
+    # version it qualifies.
+    version_match = unique_match(VERSION_PATTERN, text, "version field", manifest)
+    if not version_match.group("suffix").strip().endswith(","):
+        raise ValueError(
+            f"{manifest}: the version field ends its object, so a port-version cannot be"
+            " inserted after it; add the field by hand"
+        )
+    indent = re.match(r"[ \t]*", version_match.group("prefix")).group()
+    newline = "\r\n" if "\r\n" in text else "\n"
+    insertion = f'{newline}{indent}"port-version": 1,'
+    return text[: version_match.end()] + insertion + text[version_match.end() :]
+
+
 def prepare_update(
-    name: str, repo_dir: Path, ports_dir: Path, timeout: float, verbose: bool
+    name: str,
+    repo_dir: Path,
+    ports_dir: Path,
+    timeout: float,
+    verbose: bool,
+    bump_port_version: bool,
 ) -> PortUpdate | None:
     if not repo_dir.is_dir():
         raise ValueError(f"repository directory does not exist: {repo_dir}")
@@ -190,7 +244,20 @@ def prepare_update(
     print(f"[download] {name}: {url}")
     sha512 = archive_sha512(url, timeout, verbose)
     updated_text = updated_portfile_text(text, portfile, commit, sha512)
-    return PortUpdate(name, portfile, old_ref, commit, sha512, text, updated_text)
+    files = [FileUpdate(portfile, text, updated_text)]
+
+    if bump_port_version:
+        manifest = ports_dir / name / "vcpkg.json"
+        if not manifest.is_file():
+            raise ValueError(f"manifest does not exist: {manifest}")
+        manifest_text = read_preserving_newlines(manifest)
+        files.append(
+            FileUpdate(
+                manifest, manifest_text, updated_manifest_text(manifest_text, manifest)
+            )
+        )
+
+    return PortUpdate(name, old_ref, commit, sha512, tuple(files))
 
 
 def stage_text(path: Path, text: str) -> Path:
@@ -207,23 +274,27 @@ def stage_text(path: Path, text: str) -> Path:
 
 def apply_updates(updates: list[PortUpdate]) -> None:
     for update in updates:
-        if read_preserving_newlines(update.portfile) != update.original_text:
-            raise ValueError(f"{update.portfile}: file changed while updates were being prepared")
+        for item in update.files:
+            if read_preserving_newlines(item.path) != item.original_text:
+                raise ValueError(
+                    f"{item.path}: file changed while updates were being prepared"
+                )
 
-    staged: list[tuple[PortUpdate, Path]] = []
-    replaced: list[PortUpdate] = []
+    staged: list[tuple[FileUpdate, Path]] = []
+    replaced: list[FileUpdate] = []
     try:
         for update in updates:
-            staged.append((update, stage_text(update.portfile, update.updated_text)))
-        for update, temporary_path in staged:
-            temporary_path.replace(update.portfile)
-            replaced.append(update)
+            for item in update.files:
+                staged.append((item, stage_text(item.path, item.updated_text)))
+        for item, temporary_path in staged:
+            temporary_path.replace(item.path)
+            replaced.append(item)
         for update in updates:
             print(f"[updated] {update.name}: {update.old_ref} -> {update.new_ref}")
     except OSError:
-        for update in reversed(replaced):
-            rollback_path = stage_text(update.portfile, update.original_text)
-            rollback_path.replace(update.portfile)
+        for item in reversed(replaced):
+            rollback_path = stage_text(item.path, item.original_text)
+            rollback_path.replace(item.path)
         raise
     finally:
         for _, temporary_path in staged:
@@ -231,13 +302,14 @@ def apply_updates(updates: list[PortUpdate]) -> None:
 
 
 def print_diff(update: PortUpdate) -> None:
-    diff = difflib.unified_diff(
-        update.original_text.splitlines(keepends=True),
-        update.updated_text.splitlines(keepends=True),
-        fromfile=str(update.portfile),
-        tofile=str(update.portfile),
-    )
-    sys.stdout.writelines(diff)
+    for item in update.files:
+        diff = difflib.unified_diff(
+            item.original_text.splitlines(keepends=True),
+            item.updated_text.splitlines(keepends=True),
+            fromfile=str(item.path),
+            tofile=str(item.path),
+        )
+        sys.stdout.writelines(diff)
 
 
 def commit_message(updates: list[PortUpdate]) -> str:
@@ -260,7 +332,9 @@ def commit_message(updates: list[PortUpdate]) -> str:
 
 
 def commit_updates(repo_dir: Path, updates: list[PortUpdate]) -> None:
-    paths = [repository_path(repo_dir, update.portfile) for update in updates]
+    paths = [
+        repository_path(repo_dir, item.path) for update in updates for item in update.files
+    ]
     staged_paths = run_git(repo_dir, "diff", "--cached", "--name-only")
     if staged_paths:
         raise ValueError(f"{repo_dir}: index already contains staged changes")
@@ -308,6 +382,11 @@ def parse_args() -> argparse.Namespace:
         metavar="SECONDS",
         help="set the timeout for each archive request (default: 30)",
     )
+    parser.add_argument(
+        "--bump-port-version",
+        action="store_true",
+        help="raise port-version in vcpkg.json for each port that is updated",
+    )
     parser.add_argument("--verbose", action="store_true", help="show additional update details")
     parser.add_argument(
         "--commit", action="store_true", help="stage and commit the updated portfiles"
@@ -340,7 +419,12 @@ def main() -> int:
             raise ValueError(f"duplicate --port name: {name}")
         names.add(name)
         update = prepare_update(
-            name, Path(repo_text).resolve(), ports_dir, args.timeout, args.verbose
+            name,
+            Path(repo_text).resolve(),
+            ports_dir,
+            args.timeout,
+            args.verbose,
+            args.bump_port_version,
         )
         if update:
             updates.append(update)
