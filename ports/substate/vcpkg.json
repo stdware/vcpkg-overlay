@@ -1,0 +1,17 @@
+{
+  "name": "substate",
+  "version": "0.0.1.2",
+  "description": "Document model with transactions and undo history for editor applications.",
+  "homepage": "https://github.com/stdware/substate",
+  "license": "Apache-2.0",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}
