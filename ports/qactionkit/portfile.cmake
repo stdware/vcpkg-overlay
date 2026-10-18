@@ -7,8 +7,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/qactionkit
-    REF e57b1f7503dcff67f3380b8f09a047b058fa5f71
-    SHA512 10189c33935bedf7f904043474ea1eb43ec82d4fb30b93c4fc4be1034c708a974def73f5ed44a732eb806c4fffd7f2d0f6bea154f3ce2d5cb9ddec62a6d6f01a
+    REF ba3c2767b96d2a4999f0cf018ff5034bc9515e83
+    SHA512 1d1086c219ba0bdc0fdd7b603a74fb1700f2acb89cdac3054004950d78cd5bddc270d3943711a58ec3d07005102584a4d833246a3b4e52fc0382dc3e3608707b
 )
 
 vcpkg_check_features(
@@ -34,21 +34,15 @@ vcpkg_cmake_configure(
 vcpkg_cmake_install()
 
 # This carries the libraries the tool loads along with it. Qt is not one of them: it is not a
-# vcpkg package here, so applocal cannot see it and leaves its libraries where they are. The tool
-# finds them the way qasc does, from the Qt installation the environment already points at.
+# vcpkg package here, so applocal cannot see it and leaves its libraries where they are.
+# QActionKitMacros.cmake gives the dynamic loader the directory of Qt Core when it runs the tool.
+# An rpath to Qt added here does not survive, because vcpkg replaces the run paths of the tool
+# after this script with one to its own library directory.
 vcpkg_copy_tools(TOOL_NAMES qak_aec AUTO_CLEAN)
 
 vcpkg_cmake_config_fixup(PACKAGE_NAME ${PORT}
     CONFIG_PATH lib/cmake/QActionKit
 )
-
-# A tool linked against a Qt outside the install tree carries no rpath to it, and macOS has no
-# search path to fall back on. Same fix as qastool.
-if(VCPKG_TARGET_IS_OSX AND DEFINED ENV{QT_DIR})
-    get_filename_component(qt_lib_dir "$ENV{QT_DIR}/../.." REALPATH)
-    execute_process(COMMAND install_name_tool -add_rpath "${qt_lib_dir}"
-                            "${CURRENT_PACKAGES_DIR}/tools/${PORT}/qak_aec")
-endif()
 
 vcpkg_copy_pdbs()
 
