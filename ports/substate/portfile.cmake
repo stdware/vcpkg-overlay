@@ -4,8 +4,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/substate
-    REF b3a20855ff04121b9f53eb2d9adda1ad1ae53611
-    SHA512 184f2b04ebd3058a19ca086a23179040179a448ac4ac51b7dac97ad54d0680b8857fa01763a9e5d6bf39f60d43b4a37b2ee3e1054755d19973b11d93f6eab996
+    REF 161f6fc252e526bc730971d1f8db6d160363bde5
+    SHA512 7b7dec6b3f51cf18f19c8dfe34152af0c9fcdd0cbd58115a00ad709852fc5327a919dc7dc49309d3b2e1d957e7ebb53b50cbef89639213893774f940343cc517
 )
 
 # The triplet decides the linkage, rather than leaving the project's own default to decide it.
