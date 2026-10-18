@@ -34,4 +34,9 @@ vcpkg_cmake_config_fixup(PACKAGE_NAME ${PORT}
 # an interface target, so nothing is left under lib.
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/lib")
 
+# Points the ports that depend on qmsetup at this installation, see the file itself.
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/vcpkg-port-config.cmake"
+    DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}"
+)
+
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE")

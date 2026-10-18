@@ -21,13 +21,9 @@ vcpkg_check_features(
 # The triplet decides the linkage, rather than leaving the project's own default to decide it.
 string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "static" QACTIONKIT_BUILD_STATIC)
 
-# qmsetup is a host dependency, installed for the host triplet. The toolchain of vcpkg searches
-# the packages of the target triplet only, which is the same triplet when the build is not
-# cross-compiled, so a target such as x64-mingw-dynamic on x64-windows needs the path given.
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
-        "-Dqmsetup_DIR=${CURRENT_HOST_INSTALLED_DIR}/share/qmsetup"
         -DQACTIONKIT_BUILD_STATIC=${QACTIONKIT_BUILD_STATIC}
         -DQACTIONKIT_BUILD_EXAMPLES=OFF
         -DQACTIONKIT_BUILD_TESTS=OFF
