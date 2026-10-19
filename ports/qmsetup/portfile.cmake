@@ -21,10 +21,29 @@ vcpkg_cmake_configure(
 
 vcpkg_cmake_install()
 
-# qmcorecmd goes where every vcpkg tool goes, and what it loads goes with it. That second half is
-# the point: a dynamic stdcorelib leaves the tool installed beside nothing it can load, and
-# running it is the first thing a CMake module does.
+# qmcorecmd goes where every vcpkg tool goes, and the libraries that it loads go with it, because
+# running it is the first thing a CMake module does. On Windows vcpkg_copy_tools() copies the
+# DLLs beside the tool.
 vcpkg_copy_tools(TOOL_NAMES qmcorecmd AUTO_CLEAN)
+
+# On macOS the libraries of the ports are copied beside the tool as well, and referenced through
+# @loader_path rather than through the rpath to lib. The files in installed are hard links to
+# those in packages, and dyld may expand @loader_path through the link in packages, which holds
+# no lib directory. A library beside the tool is found through either link.
+if(VCPKG_TARGET_IS_OSX)
+    set(_tool "${CURRENT_PACKAGES_DIR}/tools/${PORT}/qmcorecmd")
+    execute_process(COMMAND otool -L "${_tool}" OUTPUT_VARIABLE _libraries
+        COMMAND_ERROR_IS_FATAL ANY)
+    string(REGEX MATCHALL "@rpath/[^ \t\n]+" _libraries "${_libraries}")
+    foreach(_library IN LISTS _libraries)
+        string(REPLACE "@rpath/" "" _name "${_library}")
+        file(REAL_PATH "${CURRENT_INSTALLED_DIR}/lib/${_name}" _file)
+        file(COPY_FILE "${_file}" "${CURRENT_PACKAGES_DIR}/tools/${PORT}/${_name}")
+        execute_process(
+            COMMAND install_name_tool -change "${_library}" "@loader_path/${_name}" "${_tool}"
+            COMMAND_ERROR_IS_FATAL ANY)
+    endforeach()
+endif()
 
 vcpkg_cmake_config_fixup(PACKAGE_NAME ${PORT}
     CONFIG_PATH lib/cmake/${PORT}
