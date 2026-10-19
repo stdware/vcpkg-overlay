@@ -3,6 +3,10 @@ set(VCPKG_CRT_LINKAGE dynamic)
 set(VCPKG_LIBRARY_LINKAGE dynamic)
 
 set(VCPKG_CMAKE_SYSTEM_NAME Darwin)
+# The oldest macOS that the applications built on the ports support, that of Qt 6.11.
+# Without it, the ports are built for the macOS of the SDK, and a library of a port then
+# fails to load on an older macOS on which the application itself starts.
+set(VCPKG_OSX_DEPLOYMENT_TARGET 13.0)
 set(VCPKG_OSX_ARCHITECTURES arm64)
 
 # Debug info comes from a flag rather than from building the ports as RelWithDebInfo. The build
