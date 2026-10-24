@@ -7,8 +7,8 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO stdware/qactionkit
-    REF ba3c2767b96d2a4999f0cf018ff5034bc9515e83
-    SHA512 1d1086c219ba0bdc0fdd7b603a74fb1700f2acb89cdac3054004950d78cd5bddc270d3943711a58ec3d07005102584a4d833246a3b4e52fc0382dc3e3608707b
+    REF d80b87f00d4f31ea0600d631b1bac6cdddc307ed
+    SHA512 b2daa6761cf5af2eabff229512931dc6fd781f0e43ac3405bf0fc1c8b7c1f220afd88c57bfa5829b24d01d770177962ba9230e3b6ae812951551a2cbbde1d3d6
 )
 
 vcpkg_check_features(
