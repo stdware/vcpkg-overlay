@@ -7,6 +7,9 @@ vcpkg_from_github(
     SHA512 d93cb2bcc57b72b6815eed143de1092d14fe22542ae9a1f8480d9ed5f44b59c50f81279d18bdd84ff6276ddd71ca1aa64a1e46d61199a5eda0d873a356194ab4
 )
 
+vcpkg_replace_string("${SOURCE_PATH}/waflib/Context.py" "import os, re, imp, sys" "import os, re, sys, types")
+vcpkg_replace_string("${SOURCE_PATH}/waflib/Context.py" "imp.new_module(WSCRIPT_FILE)" "types.ModuleType(WSCRIPT_FILE)")
+
 vcpkg_find_acquire_program(PYTHON3)
 vcpkg_cmake_get_vars(cmake_vars_file)
 include("${cmake_vars_file}")
