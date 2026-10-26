@@ -1,0 +1,14 @@
+{
+  "name": "jack2",
+  "version-semver": "1.9.22",
+  "description": "Native JACK client library",
+  "homepage": "https://jackaudio.org/",
+  "license": "GPL-2.0 AND LGPL-2.1-or-later",
+  "supports": "linux",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake-get-vars",
+      "host": true
+    }
+  ]
+}
