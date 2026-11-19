@@ -135,6 +135,54 @@ function(download_onnxruntime_from_nuget _deploy_dst_dir _runtime_dst_dir _pdb_d
     file(REMOVE_RECURSE "${_extract_dir}")
 endfunction()
 
+function(download_onnxruntime_cpu_from_nuget _deploy_dst_dir _runtime_dst_dir _pdb_dst_dir _import_dst_dir)
+    set(_url "https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime/${_version_ort}/microsoft.ml.onnxruntime.${_version_ort}.nupkg")
+    set(_download_filename "Microsoft.ML.OnnxRuntime.${_version_ort}.nupkg")
+
+    message(STATUS "Downloading ONNX Runtime from ${_url}")
+
+    lookup_onnxruntime_package_sha512("${_download_filename}" _file_hash)
+    vcpkg_download_distfile(
+        _downloaded_file_path
+        URLS "${_url}"
+        FILENAME "${_download_filename}"
+        SHA512 "${_file_hash}"
+    )
+
+    set(_extract_dir "${CURRENT_BUILDTREES_DIR}/tmp_onnxruntime")
+
+    file(REMOVE_RECURSE "${_extract_dir}")
+
+    vcpkg_extract_archive(
+        ARCHIVE "${_downloaded_file_path}"
+        DESTINATION "${_extract_dir}"
+    )
+
+    file(COPY "${_extract_dir}/build/native/include" DESTINATION "${_deploy_dst_dir}")
+
+    if(VCPKG_TARGET_IS_LINUX)
+        if(VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
+            set(_runtime "linux-x64")
+        elseif(VCPKG_TARGET_ARCHITECTURE STREQUAL "arm64")
+            set(_runtime "linux-arm64")
+        else()
+            message(FATAL_ERROR "onnxruntime-builds: unsupported Linux architecture: ${VCPKG_TARGET_ARCHITECTURE}")
+        endif()
+    elseif(VCPKG_TARGET_IS_OSX)
+        if(VCPKG_TARGET_ARCHITECTURE STREQUAL "arm64")
+            set(_runtime "osx-arm64")
+        else()
+            message(FATAL_ERROR "onnxruntime-builds: unsupported macOS architecture: ${VCPKG_TARGET_ARCHITECTURE}")
+        endif()
+    else()
+        message(FATAL_ERROR "onnxruntime-builds: unsupported operating system: ${VCPKG_TARGET_TRIPLET}")
+    endif()
+
+    _deploy_runtime_contents("${_extract_dir}/runtimes/${_runtime}/native" "${_runtime_dst_dir}" "${_pdb_dst_dir}" "${_import_dst_dir}")
+
+    file(REMOVE_RECURSE "${_extract_dir}")
+endfunction()
+
 function(download_dml_from_nuget _deploy_dst_dir _runtime_dst_dir _pdb_dst_dir _import_dst_dir)
     set(_url "https://www.nuget.org/api/v2/package/Microsoft.AI.DirectML/${_version_dml}")
     set(_download_filename "Microsoft.AI.DirectML.${_version_dml}.zip")

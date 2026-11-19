@@ -1,3 +1,11 @@
+if(VCPKG_TARGET_IS_OSX)
+    # The prebuilt ONNX Runtime dylib carries a valid Microsoft signature. The global
+    # Mach-O RPATH fixup would rewrite its load commands and invalidate that signature,
+    # which macOS arm64 rejects by killing the process. The payload is loaded by path
+    # from ONNXRUNTIME_BUILDS_RUNTIME_DIR, so it needs no RPATH adjustment.
+    set(VCPKG_FIXUP_MACHO_RPATH OFF)
+endif()
+
 set(VCPKG_POLICY_ALLOW_DLLS_IN_LIB enabled)
 set(VCPKG_POLICY_SKIP_LIB_CMAKE_MERGE_CHECK enabled)
 set(VCPKG_POLICY_SKIP_MISPLACED_CMAKE_FILES_CHECK enabled)
@@ -81,7 +89,7 @@ if(VCPKG_TARGET_IS_WINDOWS)
     endif()
 else()
     message(STATUS "Downloading CPU version of ONNX Runtime...")
-    download_onnxruntime_from_github("cpu" "${CURRENT_PACKAGES_DIR}" "${_ort_default_runtime_dir}"
+    download_onnxruntime_cpu_from_nuget("${CURRENT_PACKAGES_DIR}" "${_ort_default_runtime_dir}"
         "${_ort_default_pdb_dir}" "${_ort_default_import_dir}")
 endif()
 
