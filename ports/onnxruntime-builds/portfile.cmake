@@ -96,7 +96,7 @@ endif()
 # Optional GPU (CUDA 12) runtime deployment
 if(WITH_CUDA12)
     message(STATUS "Downloading GPU (CUDA 12.x) version of ONNX Runtime...")
-    download_onnxruntime_from_github("cuda12" "${CURRENT_PACKAGES_DIR}"
+    download_onnxruntime_cuda_from_nuget("${CURRENT_PACKAGES_DIR}"
         "${CURRENT_PACKAGES_DIR}/${_ORT_REL_RUNTIME_CUDA}"
         "${CURRENT_PACKAGES_DIR}/${_ORT_REL_PDB_CUDA}"
         "${CURRENT_PACKAGES_DIR}/${_ORT_REL_IMPORT_CUDA}")

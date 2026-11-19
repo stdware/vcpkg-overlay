@@ -183,6 +183,54 @@ function(download_onnxruntime_cpu_from_nuget _deploy_dst_dir _runtime_dst_dir _p
     file(REMOVE_RECURSE "${_extract_dir}")
 endfunction()
 
+function(download_onnxruntime_cuda_from_nuget _deploy_dst_dir _runtime_dst_dir _pdb_dst_dir _import_dst_dir)
+    # Upstream ships the CUDA binaries in one package per operating system. The package without
+    # the suffix of the same version is a meta package that carries no binaries, and only the
+    # Windows package carries headers, which the default payload already provides.
+    if(VCPKG_TARGET_IS_WINDOWS)
+        set(_package "microsoft.ml.onnxruntime.gpu.windows")
+        set(_flavor "Windows")
+        set(_runtime "win-x64")
+    elseif(VCPKG_TARGET_IS_LINUX)
+        set(_package "microsoft.ml.onnxruntime.gpu.linux")
+        set(_flavor "Linux")
+        set(_runtime "linux-x64")
+    else()
+        message(FATAL_ERROR
+            "onnxruntime-builds: no CUDA payload for ${VCPKG_TARGET_TRIPLET}")
+    endif()
+
+    set(_download_filename "Microsoft.ML.OnnxRuntime.Gpu.${_flavor}.${_version_ort}.nupkg")
+    set(_url "https://api.nuget.org/v3-flatcontainer/${_package}/${_version_ort}/${_package}.${_version_ort}.nupkg")
+
+    message(STATUS "Downloading ONNX Runtime from ${_url}")
+
+    lookup_onnxruntime_package_sha512("${_download_filename}" _file_hash)
+    vcpkg_download_distfile(
+        _downloaded_file_path
+        URLS "${_url}"
+        FILENAME "${_download_filename}"
+        SHA512 "${_file_hash}"
+    )
+
+    set(_extract_dir "${CURRENT_BUILDTREES_DIR}/tmp_onnxruntime_cuda")
+
+    file(REMOVE_RECURSE "${_extract_dir}")
+
+    vcpkg_extract_archive(
+        ARCHIVE "${_downloaded_file_path}"
+        DESTINATION "${_extract_dir}"
+    )
+
+    if(EXISTS "${_extract_dir}/build/native/include")
+        file(COPY "${_extract_dir}/build/native/include" DESTINATION "${_deploy_dst_dir}")
+    endif()
+
+    _deploy_runtime_contents("${_extract_dir}/runtimes/${_runtime}/native" "${_runtime_dst_dir}" "${_pdb_dst_dir}" "${_import_dst_dir}")
+
+    file(REMOVE_RECURSE "${_extract_dir}")
+endfunction()
+
 function(download_dml_from_nuget _deploy_dst_dir _runtime_dst_dir _pdb_dst_dir _import_dst_dir)
     set(_url "https://www.nuget.org/api/v2/package/Microsoft.AI.DirectML/${_version_dml}")
     set(_download_filename "Microsoft.AI.DirectML.${_version_dml}.zip")
