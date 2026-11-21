@@ -18,10 +18,11 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
         cuda12 WITH_CUDA12
 )
 
-# Platform support matrix: upstream payload assets only exist for these
-# combinations. Fail fast instead of silently deploying mismatched binaries
-# (the Windows NuGet package always ships win-x64 contents, so non-x64
-# triplets would otherwise pick up x64 DLLs of the wrong ABI).
+# Platform support matrix: the payload comes from NuGet packages, whose native
+# runtime directories cover only these combinations. Fail fast instead of
+# silently deploying mismatched binaries (the Windows DirectML package always
+# ships win-x64 contents, so non-x64 triplets would otherwise pick up x64 DLLs
+# of the wrong ABI).
 if(VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
     message(FATAL_ERROR
         "onnxruntime-builds: only Windows x64 is supported (triplet: ${VCPKG_TARGET_TRIPLET})")
@@ -65,7 +66,7 @@ set(_ort_default_import_dir "${CURRENT_PACKAGES_DIR}/${_ORT_REL_IMPORT_DEFAULT}"
 
 if(VCPKG_TARGET_IS_WINDOWS)
     message(STATUS "Downloading DirectML version of ONNX Runtime...")
-    download_onnxruntime_from_nuget("${CURRENT_PACKAGES_DIR}" "${_ort_default_runtime_dir}"
+    download_onnxruntime_dml_from_nuget("${CURRENT_PACKAGES_DIR}" "${_ort_default_runtime_dir}"
         "${_ort_default_pdb_dir}" "${_ort_default_import_dir}")
     download_dml_from_nuget("${CURRENT_PACKAGES_DIR}" "${_ort_default_runtime_dir}"
         "${_ort_default_pdb_dir}" "${_ort_default_import_dir}")
@@ -81,14 +82,14 @@ if(VCPKG_TARGET_IS_WINDOWS)
     endif()
 else()
     message(STATUS "Downloading CPU version of ONNX Runtime...")
-    download_onnxruntime_from_github("cpu" "${CURRENT_PACKAGES_DIR}" "${_ort_default_runtime_dir}"
+    download_onnxruntime_cpu_from_nuget("${CURRENT_PACKAGES_DIR}" "${_ort_default_runtime_dir}"
         "${_ort_default_pdb_dir}" "${_ort_default_import_dir}")
 endif()
 
 # Optional GPU (CUDA 12) runtime deployment
 if(WITH_CUDA12)
     message(STATUS "Downloading GPU (CUDA 12.x) version of ONNX Runtime...")
-    download_onnxruntime_from_github("cuda12" "${CURRENT_PACKAGES_DIR}"
+    download_onnxruntime_cuda_from_nuget("${CURRENT_PACKAGES_DIR}"
         "${CURRENT_PACKAGES_DIR}/${_ORT_REL_RUNTIME_CUDA}"
         "${CURRENT_PACKAGES_DIR}/${_ORT_REL_PDB_CUDA}"
         "${CURRENT_PACKAGES_DIR}/${_ORT_REL_IMPORT_CUDA}")
