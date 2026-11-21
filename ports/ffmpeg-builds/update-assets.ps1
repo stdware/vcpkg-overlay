@@ -19,7 +19,7 @@
 
 .EXAMPLE
     $env:GITHUB_TOKEN = 'ghp_xxx'
-    pwsh -File update-assets.ps1 -BtbnTag autobuild-2026-06-30-13-34 -PyavTag 8.1.2-1
+    pwsh -File update-assets.ps1 -BtbnTag autobuild-2026-06-30-13-34 -PyavTag 8.1.3-1
 #>
 [CmdletBinding()]
 param(

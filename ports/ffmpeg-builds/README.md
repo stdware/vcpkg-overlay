@@ -36,7 +36,7 @@ target_link_libraries(app PRIVATE FFmpeg::avcodec FFmpeg::avformat FFmpeg::swres
 
 ```powershell
 $env:GITHUB_TOKEN = 'ghp_...'   # 可选，避开 API 匿名限额
-pwsh -File update-assets.ps1 -BtbnTag autobuild-2026-06-30-13-34 -PyavTag 8.1.2-1
+pwsh -File update-assets.ps1 -BtbnTag autobuild-2026-06-30-13-34 -PyavTag 8.1.3-1
 ```
 
 脚本只用跨平台的 cmdlet，macOS / Linux 上装了 PowerShell 7（`brew install powershell` /

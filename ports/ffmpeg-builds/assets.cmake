@@ -60,12 +60,12 @@ set(FFMPEG_BUILDS_master_linuxarm64_gpl_SHA512 "bf5efb55a8e6c0936ae4ea9048027c4f
 set(FFMPEG_BUILDS_master_linuxarm64_lgpl_FILE "ffmpeg-N-125365-g9a01c1cb6a-linuxarm64-lgpl-shared.tar.xz")
 set(FFMPEG_BUILDS_master_linuxarm64_lgpl_SHA512 "01a87cb5218314cb9d8add772b1c2d7ec8db0ef449f20b9378d984564b12d34a3a57f5391b589af78d813d810bfd8e9da8d6cc31e3c97475f6140f4f71b0c54e")
 
-set(FFMPEG_BUILDS_PYAV_TAG "8.1.2-1")
+set(FFMPEG_BUILDS_PYAV_TAG "8.1.3-1")
 set(FFMPEG_BUILDS_PYAV_LINE "v8_1")
 set(FFMPEG_BUILDS_v8_1_macos-arm64_gpl_FILE "ffmpeg-macos-arm64.tar.gz")
-set(FFMPEG_BUILDS_v8_1_macos-arm64_gpl_LOCAL "pyav-ffmpeg-8.1.2-1-macos-arm64.tar.gz")
-set(FFMPEG_BUILDS_v8_1_macos-arm64_gpl_SHA512 "9e5c7746152394d8bb0db052ffba0c454f87c99073a56d4dfb9286410613e97541c7045a8c440387c21d55f1ee3abd213e9921c111eb428be9d6d8983c7e952c")
+set(FFMPEG_BUILDS_v8_1_macos-arm64_gpl_LOCAL "pyav-ffmpeg-8.1.3-1-macos-arm64.tar.gz")
+set(FFMPEG_BUILDS_v8_1_macos-arm64_gpl_SHA512 "7368667bd0510cb60690fb8203b873947dcb13baf3dc01cf7ea390420641d23458c26f9ba434897a4b5e77686fcb5edaa9cf33970e462e5181566f31c12122ed")
 set(FFMPEG_BUILDS_v8_1_macos-x86_64_gpl_FILE "ffmpeg-macos-x86_64.tar.gz")
-set(FFMPEG_BUILDS_v8_1_macos-x86_64_gpl_LOCAL "pyav-ffmpeg-8.1.2-1-macos-x86_64.tar.gz")
-set(FFMPEG_BUILDS_v8_1_macos-x86_64_gpl_SHA512 "d00229a293763ec2db37e0f1488b5e517e7e4cd0cc40646f628c162d5cbdcb1c560844ebec4506514c7f3a730c7b68ba05e2031a7487462adfad2e5562ca6f29")
+set(FFMPEG_BUILDS_v8_1_macos-x86_64_gpl_LOCAL "pyav-ffmpeg-8.1.3-1-macos-x86_64.tar.gz")
+set(FFMPEG_BUILDS_v8_1_macos-x86_64_gpl_SHA512 "55a11377db1dfe605beb82fc9089ab5a23d1d6212ed8bdb192a183fc5fbfa8b29e0d121456850e0a4c08c6f6248f05696e2a44b77f8b70c44f1e3ee7dc979684")
 

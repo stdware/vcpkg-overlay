@@ -1,6 +1,7 @@
 {
   "name": "ffmpeg-builds",
   "version": "8.1.2",
+  "port-version": 1,
   "description": [
     "Prebuilt FFmpeg shared libraries (no source build).",
     "Windows and Linux binaries come from BtbN/FFmpeg-Builds; macOS binaries come from PyAV-Org/pyav-ffmpeg because BtbN does not publish macOS builds. The port only unpacks and repackages the upstream artifacts, so configuring FFmpeg itself is not possible here - pick the closest matching variant instead."
